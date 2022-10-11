@@ -1,0 +1,20 @@
+web:
+  hosts:
+    webVM:
+      ansible_host: localhost
+      ansible_port: 2200
+      ansible_user: root
+
+db:
+  hosts:
+    dbVM:
+      ansible_host: localhost
+      ansible_port: 2201
+      ansible_user: root
+
+api:
+  hosts:
+    apiVM:
+      ansible_host: localhost
+      ansible_port: 2202
+      ansible_user: root

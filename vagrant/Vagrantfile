@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.provision "shell" do |shell|
+    ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_ed25519.pub").first.strip
+    # ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+
+    shell.inline = <<-SHELL
+      echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+
+      mkdir /root/.ssh
+      echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
+    SHELL
+  end
+
+  config.vm.define "web" do |web|
+    web.vm.box = "hashicorp/bionic64"
+    web.vm.network :forwarded_port, guest: 22, host: 2200, id: "ssh"
+    web.vm.network :forwarded_port, guest: 80, host: 8080, id: "apache"
+  end
+
+  config.vm.define "db" do |db|
+    db.vm.box = "hashicorp/bionic64"
+    db.vm.network :forwarded_port, guest: 22, host: 2201, id: "ssh"
+  end
+
+  config.vm.define "api" do |api|
+    api.vm.box = "hashicorp/bionic64"
+    api.vm.network :forwarded_port, guest: 22, host: 2202, id: "ssh"
+    api.vm.network :forwarded_port, guest: 3000, host: 3000, id: "api"
+  end
+end
