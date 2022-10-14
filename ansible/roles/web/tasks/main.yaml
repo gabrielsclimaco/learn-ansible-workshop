@@ -1,0 +1,15 @@
+- name: Install apache
+  tags: web, apache
+  apt:
+    name: "{{ apache_package }}"
+    state: present
+    update_cache: yes
+
+- name: Copy index html file for site
+  tags: web, apache, index
+  template:
+    src: "{{ index_file_template }}"
+    dest: "{{ index_file_path }}"
+    owner: root
+    group: root
+    mode: 0644

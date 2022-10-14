@@ -1,0 +1,45 @@
+- name: Install the gpg key for nodejs
+  tags: api, node
+  apt_key:
+    url: "{{ node_gpg_key_url }}"
+    state: present
+
+- name: Install the nodejs repos
+  tags: api, node
+  apt_repository:
+    repo: "{{ node_repo_url }}"
+    state: present
+    update_cache: yes
+
+- name: Install the nodejs package
+  tags: api, node
+  apt:
+    name: nodejs
+    state: present
+
+- name: Install express generator
+  tags: api, node
+  become_user: "{{ node_user }}"
+  command: npm install express-generator -g
+
+- name: Generate app
+  tags: api, node
+  become_user: "{{ node_user }}"
+  command: "express --view=pug {{ api_name }}"
+  args:
+    chdir: "{{ base_dir }}"
+    creates: "{{ api_dir }}"
+
+- name: Install dependencies
+  tags: api, node
+  become_user: "{{ node_user }}"
+  command: npm install
+  args:
+    chdir: "{{ api_dir }}"
+
+- name: Start server
+  tags: api, node
+  become_user: "{{ node_user }}"
+  shell: echo "npm start" | at now
+  args:
+    chdir: "{{ api_dir }}"

@@ -1,0 +1,10 @@
+node_gpg_key_url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+
+node_version: 16.x
+node_repo_url: "deb https://deb.nodesource.com/node_{{ node_version }} {{ ansible_distribution_release }} main"
+
+node_user: zrp
+
+base_dir: /opt
+api_name: myapp
+api_dir: "{{ base_dir }}/{{ api_name }}"

@@ -1,0 +1,7 @@
+db_name: app
+
+db_users:
+  - app
+  - zrp
+
+db_password: zrp@1234

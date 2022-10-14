@@ -1,0 +1,21 @@
+- name: create base user
+  tags: base, user
+  user:
+    name: "{{ base_user }}"
+    groups: root
+
+- name: add sudoers file for base user
+  tags: base, user
+  template:
+    src: sudoers.j2
+    dest: "/etc/sudoers.d/{{ base_user }}"
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Install base packages
+  tags: base
+  apt:
+    name: "{{ base_packages }}"
+    state: present
+    update_cache: yes

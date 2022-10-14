@@ -1,0 +1,6 @@
+base_user: zrp
+
+base_packages:
+  - git
+  - vim-nox
+  - tmux
